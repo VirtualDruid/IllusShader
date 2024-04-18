@@ -20,6 +20,7 @@ Shader "Celluloid/LitTransparent"
 		_EnvSpecularExposure("_EnvSpecularExposure", Range(-10,10)) = 0
 
 		//_ClearCoatMin("_ClearCoatMin", Range(0,1)) = 0
+		_ClearCoatTexture("_ClearCoatTexture", 2D) = "white" {}
 		_ClearCoatMask("_ClearCoatMask", Range(0,1)) = 0
 		_ClearCoatRoughness("_ClearCoatRoughness", Range(0,1)) = 0
 

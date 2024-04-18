@@ -27,6 +27,9 @@ cbuffer UnityPerMaterial
     SamplerState sampler_RoughnessMetallicEnvRoughnessTexture;
     
     
+    //2 channel
+    Texture2D _ClearCoatTexture;
+    SamplerState sampler_ClearCoatTexture;
     //float _ClearCoatMin;
     float _ClearCoatMask;
     float _ClearCoatRoughness;
@@ -109,19 +112,20 @@ MaterialInput SampleMaterial(
     input._Alpha = baseColorSample.a * _BaseColor.a;
     input._IsDoubleSide = _IsDoubleSide;
     input._BaseColor = baseColorSample.rgb * _BaseColor.rgb;
-    float3 roughnessMetallicEnvRoughness = _RoughnessMetallicEnvRoughnessTexture.Sample(sampler_RoughnessMetallicEnvRoughnessTexture, uv).xyz;
+    float3 roughnessMetallicEnvRoughness = _RoughnessMetallicEnvRoughnessTexture.Sample(sampler_RoughnessMetallicEnvRoughnessTexture, uv).rgb;
     input._RoughnessLinear = _Roughness * roughnessMetallicEnvRoughness.r;
     input._Metallic = _Metallic * roughnessMetallicEnvRoughness.g;
     
     //input._ClearCoatMin = _ClearCoatMin;
     
-    input._ClearCoatMask = _ClearCoatMask;
-    input._ClearCoatRoughnessLinear = _ClearCoatRoughness;\
+    float2 clearCoatTexture = _ClearCoatTexture.Sample(sampler_ClearCoatTexture, uv).rg;
+    input._ClearCoatMask = _ClearCoatMask * clearCoatTexture.r;
+    input._ClearCoatRoughnessLinear = _ClearCoatRoughness * clearCoatTexture.g;
     
     input._Scatter = _Scatter;
     
     
-    float3 transmissionTexture = _TransmissionTexture.Sample(sampler_TransmissionTexture, uv).xyz;
+    float3 transmissionTexture = _TransmissionTexture.Sample(sampler_TransmissionTexture, uv).rgb;
     input._Transmission = _Transmission * transmissionTexture.r;
     input._TransmissionChroma = _TransmissionChroma * transmissionTexture.g;
     input._TransmissionScatter = _TransmissionScatter * transmissionTexture.b;
@@ -141,7 +145,8 @@ MaterialInput SampleMaterial(
     input._EnvSpecularSample = _EnvSpecularTexture.SampleLevel(
         sampler_EnvSpecularTexture, 
         sampleDir, 
-        PerceptualRoughnessToMipmapLevel(_EnvSpecularRoughness, 6)).xyz 
+        PerceptualRoughnessToMipmapLevel(_EnvSpecularRoughness, 6)
+    ).rgb 
     * _EnvSpecularFactor 
     * _EnvSpecularColor
     * pow(2, _EnvSpecularExposure);
