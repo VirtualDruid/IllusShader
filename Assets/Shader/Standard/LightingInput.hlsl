@@ -23,6 +23,8 @@ struct MaterialInput
     float _EnvSpecularRoughness;
     float _EnvSpecularFactor;
     
+    float3 _Emissive;
+    
     float _ClearCoatMask;
     //float _ClearCoatMin;
     float _ClearCoatRoughnessLinear;

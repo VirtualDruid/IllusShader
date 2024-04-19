@@ -19,6 +19,9 @@ Shader "Celluloid/LitOpaque"
 		_EnvSpecularFactor("_EnvSpecularFactor", Range(0,1)) = 1
 		_EnvSpecularExposure("_EnvSpecularExposure", Range(-10,10)) = 0
 
+		_EmissiveTexture("_EmissiveTexture", 2D) = "white" {}
+		_Emissive("_Emissive", Color) = (0,0,0,0)
+
 		//_ClearCoatMin("_ClearCoatMin", Range(0,1)) = 0
 		_ClearCoatTexture("_ClearCoatTexture", 2D) = "white" {}
 		_ClearCoatMask("_ClearCoatMask", Range(0,1)) = 0
@@ -220,10 +223,10 @@ Shader "Celluloid/LitOpaque"
 			    	sinput._Time = _Time.xx;
 			    	//sinput.shadowDepthMap = _MainLightShadowmapTexture;
 			    	sinput.shadowSamplerState = _linear_clamp_sampler;
-			    	float3 a, b, c, d, e;
+			    	float3 diffuse, specular, clearcoat, transmission, envSpecular;
 			    	//float4 _dbg;
-			    	Forward(linput, minput, sinput, a, b, c, d, e);
-			    	forwardOutput = float4(a + b + c + d + e , 1);
+			    	Forward(linput, minput, sinput, diffuse, specular, clearcoat, transmission, envSpecular);
+			    	forwardOutput = float4(diffuse + specular + clearcoat + transmission + envSpecular + minput._Emissive , 1);
 			    	//forwardOutput = minput._Alpha;
 			    	//forwardOutput = _dbg;
 			    	//forwardOutput = i.normalWS.xyzx;

@@ -22,6 +22,13 @@ cbuffer UnityPerMaterial
     float _EnvSpecularFactor;
     float _EnvSpecularExposure;
     
+    Texture2D _EmissiveTexture;
+    SamplerState sampler_EmissiveTexture;
+    
+    
+    float3 _Emissive;
+    
+    
     //3 channel
     Texture2D _RoughnessMetallicEnvRoughnessTexture;
     SamplerState sampler_RoughnessMetallicEnvRoughnessTexture;
@@ -116,6 +123,9 @@ MaterialInput SampleMaterial(
     input._RoughnessLinear = _Roughness * roughnessMetallicEnvRoughness.r;
     input._Metallic = _Metallic * roughnessMetallicEnvRoughness.g;
     
+    float3 emissiveTexture = _EmissiveTexture.Sample(sampler_EmissiveTexture, uv).rgb;
+    input._Emissive = emissiveTexture * _Emissive;
+    
     //input._ClearCoatMin = _ClearCoatMin;
     
     float2 clearCoatTexture = _ClearCoatTexture.Sample(sampler_ClearCoatTexture, uv).rg;
@@ -145,7 +155,7 @@ MaterialInput SampleMaterial(
     input._EnvSpecularSample = _EnvSpecularTexture.SampleLevel(
         sampler_EnvSpecularTexture, 
         sampleDir, 
-        PerceptualRoughnessToMipmapLevel(_EnvSpecularRoughness, 6)
+        PerceptualRoughnessToMipmapLevel(_EnvSpecularRoughness * roughnessMetallicEnvRoughness.b, 6)
     ).rgb 
     * _EnvSpecularFactor 
     * _EnvSpecularColor
