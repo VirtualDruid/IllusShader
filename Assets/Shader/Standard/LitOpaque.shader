@@ -28,9 +28,9 @@ Shader "Celluloid/LitOpaque"
 		_ClearCoatRoughness("_ClearCoatRoughness", Range(0,1)) = 0
 
 		_TransmissionTexture("_TransmissionTexture", 2D) = "white" {}
-	    _Transmission("_Transmission", Range(0,1)) = 0
-	    _TransmissionChroma("_TransmissionChroma", Range(0,1)) = 0
-	    _TransmissionScatter("_TransmissionScatter", Range(0,1)) = 0
+	   	_Transmission("_Transmission", Range(0,1)) = 0
+	        _TransmissionChroma("_TransmissionChroma", Range(0,1)) = 0
+	        _TransmissionScatter("_TransmissionScatter", Range(0,1)) = 0
 
 		_Scatter("_Scatter", Range(0,1)) = 0
 
@@ -48,8 +48,8 @@ Shader "Celluloid/LitOpaque"
 		SubShader
 		{
 			Tags {
-				  "RenderType" = "Opaque"
-				  "RenderPipeline" = "UniversalPipeline"
+			      "RenderType" = "Opaque"
+			      "RenderPipeline" = "UniversalPipeline"
 			      "UniversalMaterialType" = "Lit"
 			      "IgnoreProjector" = "True"
 			}
